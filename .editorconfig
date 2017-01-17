@@ -1,0 +1,36 @@
+; This file is for unifying the coding style for different editors and IDEs.
+; More information at http://editorconfig.org
+
+root = true                         ; top-most EditorConfig file
+
+[*]
+charset = utf-8
+end_of_line = lf
+indent_size = 2
+indent_style = space
+insert_final_newline = true
+# Get rid of whitespace to avoid diffs with a bunch of EOL changes
+trim_trailing_whitespace = true
+
+[*.{json,rb,rst,yml,txt,pp}]
+indent_size = 2
+insert_final_newline = false
+indent_style = space
+
+[*.md]
+indent_size = 4
+# trailing whitespace required for Github flavored markdown
+trim_trailing_whitespace = false
+
+[*.{py,php,sh}]
+indent_size = 4
+indent_style = space
+
+[*.{sls,pillar.example}]
+indent_size = 2
+indent_style = space
+insert_final_newline = false
+
+[{Rakefile,Gemfile*}]
+indent_size = 2
+indent_style = space

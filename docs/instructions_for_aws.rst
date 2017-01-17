@@ -1,0 +1,146 @@
+===
+AWS
+===
+
+Required Permissions for IAM Users
+----------------------------------
+
+If you're logged on as an AWS Identity and Access Management (IAM) user, you'll need the following permissions in your IAM policy to use VM Import/Export, where ``ami-importbucket`` is the bucket where the disk images are stored::
+
+  {
+    "Version": "2012-10-17",
+    "Statement": [
+      {
+        "Effect": "Allow",
+        "Action": [
+          "s3:ListAllMyBuckets"
+        ],
+        "Resource": "*"
+      },
+      {
+        "Effect": "Allow",
+        "Action": [
+          "s3:CreateBucket",
+          "s3:DeleteBucket",
+          "s3:DeleteObject",
+          "s3:GetBucketLocation",
+          "s3:GetObject",
+          "s3:ListBucket",
+          "s3:PutObject"
+        ],
+        "Resource": ["arn:aws:s3:::ami-importbucket","arn:aws:s3:::ami-importbucket/*"]
+      },
+      {
+        "Effect": "Allow",
+        "Action": [
+          "ec2:CancelConversionTask",
+          "ec2:CancelExportTask",
+          "ec2:CreateImage",
+          "ec2:CreateInstanceExportTask",
+          "ec2:CreateTags",
+          "ec2:DeleteTags",
+          "ec2:DescribeConversionTasks",
+          "ec2:DescribeExportTasks",
+          "ec2:DescribeInstanceAttribute",
+          "ec2:DescribeInstanceStatus",
+          "ec2:DescribeInstances",
+          "ec2:DescribeTags",
+          "ec2:ImportInstance",
+          "ec2:ImportVolume",
+          "ec2:StartInstances",
+          "ec2:StopInstances",
+          "ec2:TerminateInstances",
+          "ec2:ImportImage",
+          "ec2:ImportSnapshot",
+          "ec2:DescribeImportImageTasks",
+          "ec2:DescribeImportSnapshotTasks",
+          "ec2:CancelImportTask"
+        ],
+        "Resource": "*"
+      }
+    ]
+  }
+
+Amazon S3 Bucket
+----------------
+
+VM Import requires an Amazon S3 bucket to store your disk images, in the region where you want to import your VMs. You can create a bucket as follows, or use an existing bucket if you prefer.
+
+1. Open the Amazon S3 console at https://console.aws.amazon.com/s3
+2. Choose **Create Bucket**.
+3. In the Create a Bucket dialog box, do the following:
+   a. For **Bucket Name**,type a name for your bucket. This name must be unique across all existing bucket names in Amazon S3.
+   b. For **Region**, select the region that you want for your AMI.
+   c. Choose **Create**
+
+VM Import Service Role
+----------------------
+
+VM Import requires a role to perform certain operations, such as downloading disk images from an Amazon S3 bucket. You must create a role with the name ``vmimport`` with the following policy and trusted entities.
+
+To create the service role
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+1. Create a file named trust-policy.json with the following policy:
+::
+
+  {
+     "Version": "2012-10-17",
+     "Statement": [
+        {
+           "Effect": "Allow",
+           "Principal": { "Service": "vmie.amazonaws.com" },
+           "Action": "sts:AssumeRole",
+           "Condition": {
+              "StringEquals":{
+                 "sts:Externalid": "vmimport"
+              }
+           }
+        }
+     ]
+  }
+2. Use the ``create-role`` command to create a role named ``vmimport`` and give VM Import/Export access to it:
+::
+
+  aws iam create-role --role-name vmimport --assume-role-policy-document file://trust-policy.json
+3. Create a file named ``role-policy.json`` with the following policy, where ``ami-importbucket`` is the bucket where the disk images are stored:
+::
+
+  {
+     "Version": "2012-10-17",
+     "Statement": [
+        {
+           "Effect": "Allow",
+           "Action": [
+              "s3:ListBucket",
+              "s3:GetBucketLocation"
+           ],
+           "Resource": [
+              "arn:aws:s3:::ami-importbucket"
+           ]
+        },
+        {
+           "Effect": "Allow",
+           "Action": [
+              "s3:GetObject"
+           ],
+           "Resource": [
+              "arn:aws:s3:::ami-importbucket/*"
+           ]
+        },
+        {
+           "Effect": "Allow",
+           "Action":[
+              "ec2:ModifySnapshotAttribute",
+              "ec2:CopySnapshot",
+              "ec2:RegisterImage",
+              "ec2:Describe*"
+           ],
+           "Resource": "*"
+        }
+     ]
+  }
+4. Use the following ``put-role-policy`` command to attach the policy to the role created above:
+::
+
+  aws iam put-role-policy --role-name vmimport --policy-name vmimport --policy-document file://role-policy.json

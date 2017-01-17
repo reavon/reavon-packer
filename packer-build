@@ -1,0 +1,21 @@
+#!/bin/bash
+
+set -e
+
+if [[ $# -ge 1 ]]; then
+  PACKER_LOG=1
+  PACKER_LOG_PATH="logs/packer_debug_$(date +"%y%m%d").log"
+
+  if [ -f $PACKER_LOG_PATH ]; then
+    PACKER_LOG_PATH="logs/packer_debug_$(date +"%y%m%d%H%M").log"
+  fi
+
+  export PACKER_LOG
+  export PACKER_LOG_PATH
+
+  packer build --on-error=ask template/$1
+  exit $?
+else
+  echo "I need a template file!"
+  exit 1
+fi

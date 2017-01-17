@@ -1,0 +1,15 @@
+build*
+inspect*
+validate*
+bin/virtualbox/
+box/
+builds/
+# Not sure why I have to put * here but I do
+logs/*
+!logs/.gitkeep
+output-*/
+packer_cache/
+/puppet/modules/*
+!/puppet/modules/install_modules.sh
+!/puppet/modules/helloworld/
+vagrant/

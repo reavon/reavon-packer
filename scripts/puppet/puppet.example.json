@@ -1,0 +1,28 @@
+{
+  "_comment": "Puppet Masterless provisioner example.",
+
+  "builders": [
+    {
+      "type": "this",
+    }
+  ]
+
+  "provisioners": [
+    {
+      "type": "shell",
+      "environment_vars": [
+        "CERT=foreman.localdomain"
+      ],
+      "script": "scripts/foreman.sh"
+    },
+
+    {
+      "type": "puppet-masterless",
+      "manifest-file": "puppet/site.pp",
+      "modules_paths": [
+        "modules"
+      ],
+      "prevent_sudo": true
+    }
+  ]
+}

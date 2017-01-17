@@ -13,7 +13,7 @@ if [[ $# -ge 1 ]]; then
   export PACKER_LOG
   export PACKER_LOG_PATH
 
-  packer build --on-error=ask template/$1
+  packer build --on-error=ask templates/$1
   exit $?
 else
   echo "I need a template file!"

@@ -114,7 +114,7 @@ packer build "$packer_template"
    - lvresize -r -L +100%FREE /dev/vg00/lv_nlm
 ....
 
-**HINT** To create passwords for kickstart files, etc:
+HINT: To create passwords for kickstart files, etc:
 
 [source,python]
 ....

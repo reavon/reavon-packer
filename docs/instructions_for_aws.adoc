@@ -2,7 +2,7 @@
 
 == Required Permissions for IAM Users
 
-If you're logged on as an AWS Identity and Access Management (IAM) user, you'll need the following permissions in your IAM policy to use VM Import/Export, where `ami-importbucket` is the bucket where the disk images are stored::
+If you're logged on as an AWS Identity and Access Management (IAM) user, you'll need the following permissions in your IAM policy to use VM Import/Export, where `ami-importbucket` is the bucket where the disk images are stored:
 
 [source,json]
 ....
@@ -79,7 +79,6 @@ VM Import requires a role to perform certain operations, such as downloading dis
 == To create the service role
 
 . Create a file named trust-policy.json with the following policy:
-
 [source,json]
 ....
 {
@@ -98,15 +97,11 @@ VM Import requires a role to perform certain operations, such as downloading dis
    ]
 }
 ....
-
 . Use the `create-role` command to create a role named `vmimport` and give VM Import/Export access to it:
-
 ....
 aws iam create-role --role-name vmimport --assume-role-policy-document file://trust-policy.json
 ....
-
 . Create a file named `role-policy.json` with the following policy, where `ami-importbucket` is the bucket where the disk images are stored:
-
 [source,json]
 ....
 {
@@ -144,9 +139,7 @@ aws iam create-role --role-name vmimport --assume-role-policy-document file://tr
    ]
 }
 ....
-
 . Use the following `put-role-policy` command to attach the policy to the role created above:
-
 ....
  aws iam put-role-policy --role-name vmimport --policy-name vmimport --policy-document file://role-policy.json
 ....

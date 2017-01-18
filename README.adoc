@@ -37,6 +37,7 @@ We use variables when working with packer so that we do not leak credentials via
 
 Create a file with all of your needed packer variables and source it.
 
+[source,bash]
 ....
 cat << PACKER > /home/${USER}/.packer_variables
 # Personal AWS Creds
@@ -64,35 +65,58 @@ PACKER
 
 Fill in the variables and source it
 
- . /home/${USER}/.packer_variables
+[source,bash]
+....
+. /home/${USER}/.packer_variables
+....
 
 Export the template we will be using
 
- export packer_template="CentOS-7-x86_64-Minimal.json"
+[source,bash]
+....
+export packer_template="CentOS-7-x86_64-Minimal.json"
+....
 
 Make sure packer is installed and runs
 
- packer --version
+[source,bash]
+....
+packer --version
+....
 
 Validate the template
 
- packer validate "$packer_template"
+[source,bash]
+....
+packer validate "$packer_template"
+....
 
 Get an overview of what the template includes (variables, builders, provisioners)
 
- packer inspect "$packer_template"
+[source,bash]
+....
+packer inspect "$packer_template"
+....
 
 Produce machine images for all defined builders
 
- packer build "$packer_template"
+[source,bash]
+....
+packer build "$packer_template"
+....
 
 == Dynamic resize of a volume in CentOS 7 (WIP)
 
+....
  runcmd:
    - /usr/bin/growpart /dev/xvda 2
    - pvresize /dev/xvda2
    - lvresize -r -L +100%FREE /dev/vg00/lv_nlm
+....
 
 **HINT** To create passwords for kickstart files, etc:
 
- python -c 'import crypt; print(crypt.crypt("MyS3CR3TP455", crypt.mksalt(crypt.METHOD_SHA512)))'
+[source,python]
+....
+python -c 'import crypt; print(crypt.crypt("MyS3CR3TP455", crypt.mksalt(crypt.METHOD_SHA512)))'
+....

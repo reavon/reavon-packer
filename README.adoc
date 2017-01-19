@@ -28,7 +28,7 @@ packer-templates/
                 ├── .editorconfig       <-- so we are all consistant
                 ├── .gitignore          <-- We don't want to share everything with the world
                 ├── packer-build*       <-- Script that kicks off packer run
-                └── README.md           <-- You are reading it
+                └── README.adoc         <-- You are reading it
 ....
 
 == Variables
@@ -40,16 +40,6 @@ Create a file with all of your needed packer variables and source it.
 [source,bash]
 ....
 cat << PACKER > /home/${USER}/.packer_variables
-# Personal AWS Creds
-AWS_ACCESS_KEY=
-AWS_SECRET_KEY=
-
-AWS_KEY_PAIR=nocbot@nlm
-
-export AWS_ACCESS_KEY
-export AWS_SECRET_KEY
-export AWS_KEY_PAIR
-
 # Packer AMI Builder creds
 PACKER_AWS_ACCESS_KEY=
 PACKER_AWS_SECRET_KEY=

@@ -431,5 +431,5 @@ function replace_or_append {
 
 replace_or_append '/etc/security/pwquality.conf' '^minclass' $var_password_pam_minclass 'CCE-27115-5' '%s = %s'
 
-echo "TMOUT = 600" >> /etc/profile.d/tmout.sh
-echo "export TMOUT" >> /etc/profile/tmout.sh
+echo "TMOUT=600" >> /etc/profile.d/tmout.sh
+echo "export TMOUT" >> /etc/profile.d/tmout.sh

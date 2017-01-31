@@ -92,8 +92,7 @@
           "scripts/scripts_sysops/base.sh",
           "scripts/scripts_sysops/scap-fixes.sh",
           "scripts/scripts_devops/base.sh",
-          "scripts/scripts_sysops/cleanup.sh",
-          "scripts/scripts_sysops/zerodisk.sh"
+          "scripts/scripts_sysops/cleanup.sh"
        ]
    }
   ],
